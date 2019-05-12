@@ -1,3 +1,5 @@
+package HA_01;
+
 import HA_01.*;
 import org.junit.Test;
 
