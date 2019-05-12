@@ -8,6 +8,9 @@ import org.junit.Test;
  * Homework No 01
  * University of Kassel
  */
+// HA01: 07/ 10
+    // -2 Kein Test es fehlen Assertions
+    // -1 Tests mussen auch im Package sein
 public class TestDeliveryService {
     @Test
     public void testDeliveryService() {

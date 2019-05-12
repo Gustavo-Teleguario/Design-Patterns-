@@ -77,6 +77,7 @@ public abstract class Node {
         return this;
     }
 
+    // Falsche Implementation des Pattern (*1)
     public int sumStoryPoints() {
         int counter = 0;
         for (int j = 0; j < this.getChildNodes().size(); j++) {

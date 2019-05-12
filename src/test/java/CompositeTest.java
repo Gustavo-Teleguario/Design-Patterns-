@@ -8,6 +8,11 @@ import org.junit.Test;
  * University of Kassel
  */
 
+// HA02: 02/10
+    // -2 Kein Test es fehlen Assertions. Naechtes mal mehr Punkte abzug
+    // -3 Siehe (*1)
+    // -3 Kein gitignore
+
 public class CompositeTest {
     @Test
     public void compositeTest() {
