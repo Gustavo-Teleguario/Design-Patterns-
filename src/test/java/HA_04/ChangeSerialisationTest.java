@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
  * Homework No 04
  * University of Kassel
  */
-
+// HA04: 10/10
 public class ChangeSerialisationTest {
 
 

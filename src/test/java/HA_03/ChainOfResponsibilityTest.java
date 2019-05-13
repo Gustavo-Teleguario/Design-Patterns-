@@ -14,6 +14,7 @@ import static org.junit.Assert.assertEquals;
  * Homework No 03
  * University of Kassel
  */
+// HA03: 10/10
 public class ChainOfResponsibilityTest {
 
     @Test
