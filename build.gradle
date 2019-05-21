@@ -1,15 +1,21 @@
 plugins {
     id 'java'
+    id 'org.openjfx.javafxplugin' version '0.0.7'
+    id 'application'
 }
 
 group 'UniKassel'
 version '1.0'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 12
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://repo.eclipse.org/content/repositories/paho-snapshots/"
+    }
 }
+
 
 dependencies {
     testCompile(
@@ -22,7 +28,11 @@ dependencies {
     )
 
     compile 'org.json:json:20171018'
+
+    compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2'
+    compile 'org.eclipse.paho:org.eclipse.paho.android.service:1.0.2'
 }
+
 
 test {
     useJUnitPlatform()
@@ -32,4 +42,11 @@ jar {
     manifest {
         attributes 'Main-Class': 'HolaGrdle'
     }
+
 }
+javafx {
+    version = "12.0.1"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+mainClassName = 'HA_05.GUITest'
+
