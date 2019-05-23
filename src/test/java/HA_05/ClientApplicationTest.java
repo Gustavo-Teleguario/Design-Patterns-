@@ -1,5 +1,4 @@
 package HA_05;
-
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -15,6 +14,13 @@ import javax.xml.soap.Text;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
+/**
+ * Created by Maynor Teleguario
+ * 30247228
+ * Design Patterns Summer Semester 2019
+ * Homework No 05
+ * University of Kassel
+ */
 
 public class ClientApplicationTest extends ApplicationTest {
 

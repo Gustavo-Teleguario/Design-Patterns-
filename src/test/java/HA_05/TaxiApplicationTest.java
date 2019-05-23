@@ -12,7 +12,13 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-
+/**
+ * Created by Maynor Teleguario
+ * 30247228
+ * Design Patterns Summer Semester 2019
+ * Homework No 05
+ * University of Kassel
+ */
 public class TaxiApplicationTest extends ApplicationTest {
     @Override
     public void start(Stage primaryStage) throws Exception {

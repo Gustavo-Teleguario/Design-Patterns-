@@ -9,9 +9,14 @@ import org.junit.Test;
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
-
+/**
+ * Created by Maynor Teleguario
+ * 30247228
+ * Design Patterns Summer Semester 2019
+ * Homework No 05
+ * University of Kassel
+ */
 public class ProxyPatternTest {
-
 
     @Test
     public void fileTest(){
@@ -20,14 +25,23 @@ public class ProxyPatternTest {
         System.out.println("|                 TEST BEGINN                 |");
         System.out.println("|                                             |");
         System.out.println("*************************** *******************");
-
         File clientScreenFXML = new File("src\\main\\resources\\HA_05\\ClientScreen.fxml");
         Assert.assertTrue(clientScreenFXML.exists());
         File taxiScrennFXML = new File("src\\main\\resources\\HA_05\\TaxiScreen.fxml");
         Assert.assertTrue(taxiScrennFXML.exists());
+        System.out.println("***********************************************");
+        System.out.println("|                                             |");
+        System.out.println("|                 TEST END                    |");
+        System.out.println("|                                             |");
+        System.out.println("*************************** *******************");
     }
     @Test
     public void mqttClientTest(){
+        System.out.println("***********************************************");
+        System.out.println("|                                             |");
+        System.out.println("|                 TEST BEGINN                 |");
+        System.out.println("|                                             |");
+        System.out.println("*************************** *******************");
         Client client = new Client("toTransport",new TaxiApplication());
         TransportListener transportListener = new TransportListener("toCarla", "Thea", "12 Euro");
 
@@ -42,7 +56,6 @@ public class ProxyPatternTest {
             testObject.put("receiver", transportListener.getType());
             testObject.put("taxiFahrer", transportListener.getName());
             testObject.put("preice", transportListener.getPreice());
-
             assertEquals("toTransport", topic);
             client.sendRequest(testObject);
 
