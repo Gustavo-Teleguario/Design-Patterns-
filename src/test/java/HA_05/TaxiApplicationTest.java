@@ -19,6 +19,8 @@ import static org.junit.Assert.assertEquals;
  * Homework No 05
  * University of Kassel
  */
+// HA05: 07/10
+    // -3 Das ist kein richtiges Test
 public class TaxiApplicationTest extends ApplicationTest {
     @Override
     public void start(Stage primaryStage) throws Exception {
