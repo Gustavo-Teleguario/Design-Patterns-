@@ -1,7 +1,6 @@
 package HA_06.controller;
-import HA_06.commandHandler.CommandHandler;
-import HA_06.commandHandler.DrawCommand;
-import HA_06.commandHandler.LineCommand;
+
+import HA_06.commandHandler.*;
 import HA_06.Node;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -24,30 +23,32 @@ public class Controller extends Application {
     private LinkedList<String> revertedCommand;
     private HashMap<String, CommandHandler> handle;
     private HashMap<String, Node> objects;
-
     private Pane drawArea;
-
+    private TextField commandField;
 
     public Controller() {
-
         LineCommand lineCommand = new LineCommand(this);
-        DrawCommand drawCommand = new DrawCommand(this);
+        GroupCommand groupCommand = new GroupCommand(this);
+        CloneCommand cloneCommand = new CloneCommand(this);
         commandList = new LinkedList<>();
         revertedCommand = new LinkedList<>();
         objects = new HashMap<>();
+
         handle = new HashMap<String, CommandHandler>();
         handle.put("line", lineCommand);
-        handle.put("draw", drawCommand);
+        handle.put("group", groupCommand);
+        handle.put("clone", cloneCommand);
     }
-
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        primaryStage.setTitle("2D-GRAPHIC-EDITOR");
         VBox box = new VBox();
-        TextField commandField = new TextField();
-        commandField.setMinWidth(300);
+        this.commandField = new TextField();
+        this.commandField.setId("commandField");
+        this.commandField.setMinWidth(300);
         this.drawArea = new Pane();
-        commandField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+        this.commandField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() != KeyCode.ENTER) {
@@ -59,12 +60,10 @@ public class Controller extends Application {
                 System.out.println(command);
                 String[] stringsParts = command.split(" ");
                 CommandHandler commandHandler = handle.get(stringsParts[0]);
-                System.out.println(handle.get(stringsParts));
                 commandHandler.execute(stringsParts);
                 commandField.clear();
             }
         });
-
         drawArea.setMinSize(400, 300);
         box.setAlignment(Pos.CENTER);
         box.getChildren().addAll(drawArea, commandField);
@@ -75,13 +74,7 @@ public class Controller extends Application {
         primaryStage.show();
     }
 
-
-    private void drawLine(Line line) {
-        drawArea.getChildren().addAll(line);
-
-    }
-
-    public void drawObject(Node nodeObject) {
+    public void drawLines(Node nodeObject) {
         if (nodeObject.getChildrenNodes() == null) {
             HA_06.Line lineObject = (HA_06.Line) nodeObject;
             Line line = new Line();
@@ -89,17 +82,18 @@ public class Controller extends Application {
             line.setStartY(lineObject.getyPos());
             line.setEndX(lineObject.getxEnd());
             line.setEndY(lineObject.getyEnd());
-            drawLine(line);
+            drawArea.getChildren().addAll(line);
             return;
         }
         for (Node el : nodeObject.getChildrenNodes()) {
             if (el != null) {
-                drawObject(el);
+                drawLines(el);
             }
         }
     }
+
     public void clearDrawArea() {
-        System.out.println(drawArea);
+        System.out.println("AREA CLEANING\n");
         drawArea.getChildren().clear();
     }
 
@@ -119,4 +113,15 @@ public class Controller extends Application {
         return objects;
     }
 
+    public void setHandle(HashMap<String, CommandHandler> handle) {
+        this.handle = handle;
+    }
+
+    public Pane getDrawArea() {
+        return drawArea;
+    }
+
+    public TextField getCommandField() {
+        return commandField;
+    }
 }

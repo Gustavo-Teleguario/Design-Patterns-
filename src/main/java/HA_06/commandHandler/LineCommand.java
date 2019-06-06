@@ -10,7 +10,6 @@ public class LineCommand extends CommandHandler {
     public LineCommand(Controller controller) {
         this.controller = controller;
     }
-
     @Override
     public boolean execute(String[] path) {
         try {
@@ -21,9 +20,10 @@ public class LineCommand extends CommandHandler {
             line.setxEnd(Integer.parseInt(path[4]));
             line.setyEnd(Integer.parseInt(path[5]));
             controller.getObjects().put(path[1], line);
-            controller.drawObject(line);
+            controller.drawLines(line);
             return true;
         } catch (NumberFormatException e) {
+           System.out.println("ERROR Line not define\n");
             return false;
         }
 
