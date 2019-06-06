@@ -3,6 +3,7 @@ package HA_06.controller;
 import HA_06.commandHandler.*;
 import HA_06.Node;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -30,6 +31,8 @@ public class Controller extends Application {
         LineCommand lineCommand = new LineCommand(this);
         GroupCommand groupCommand = new GroupCommand(this);
         CloneCommand cloneCommand = new CloneCommand(this);
+        RedoCommand redoCommand = new RedoCommand(this);
+        UndoCommand undoCommand = new UndoCommand(this);
         commandList = new LinkedList<>();
         revertedCommand = new LinkedList<>();
         objects = new HashMap<>();
@@ -38,6 +41,8 @@ public class Controller extends Application {
         handle.put("line", lineCommand);
         handle.put("group", groupCommand);
         handle.put("clone", cloneCommand);
+        handle.put("undo", undoCommand);
+        handle.put("redo", redoCommand);
     }
 
     @Override
@@ -95,6 +100,52 @@ public class Controller extends Application {
     public void clearDrawArea() {
         System.out.println("AREA CLEANING\n");
         drawArea.getChildren().clear();
+    }
+
+    public void undoRedoCommand(String command) {
+        if (command.equals("undo")) {
+            System.out.println("COMMAND_NAME: "+ command);
+            LinkedList<String> commandTmp = new LinkedList<>();
+            getCommandList().removeLast();
+            getRevertedCommand().add(getCommandList().pollLast());
+            System.out.println("REVERET " + getRevertedCommand().size());
+            commandField.clear();
+
+            for (String el : getCommandList())
+                commandTmp.add(el);
+
+
+            for (String stCom : commandTmp) {
+                String[] stringParts = stCom.split(" ");
+                CommandHandler commandHandler = handle.get(stringParts[0]);
+                commandHandler.execute(stringParts);
+                commandField.clear();
+            }
+
+        } else if (command.equals("redo")) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1000);
+                        System.out.println("COMMAND-NAME: " + command);
+                        getCommandList().removeLast();
+                        getCommandList().add(getRevertedCommand().pollLast());
+                        String[] stringParts = getCommandList().getLast().split(" ");
+                        CommandHandler commandHandler = handle.get(stringParts[0]);
+                        for(int i = 0; i <stringParts.length; i++){
+                            System.out.print(" "+stringParts[i]);
+                        }
+                        System.out.println("");
+                        commandHandler.execute(stringParts);
+                        commandField.clear();
+                    } catch (InterruptedException e) {
+                        throw new IllegalStateException(e);
+                    }
+                }
+            });
+        }
+
     }
 
     public LinkedList<String> getCommandList() {

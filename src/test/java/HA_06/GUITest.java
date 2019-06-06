@@ -6,7 +6,18 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
+
 import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
+
+/**
+ * Created by Maynor Teleguario
+ * 30247228
+ * Design Patterns Summer Semester 2019
+ * Homework No 06
+ * University of Kassel
+ */
 
 public class GUITest extends ApplicationTest {
 
@@ -41,8 +52,10 @@ public class GUITest extends ApplicationTest {
         //Nikolaus Haus gruppe von linien
         commands.add("group g1 l1 l2 l3 l4 l5 l6 l7 l8");
         commands.add("group g2 l1 l2 l3 l4 l5 l6 l7 l8");
-        commands.add("clone g1 g2 100 60");
-
+        commands.add("clone g1 g2 60 100");
+        commands.add("clone g1 60 0");
+        commands.add("undo");
+        commands.add("redo");
 
         for (String el : commands) {
             clickOn(commandField).write(el);
@@ -53,6 +66,6 @@ public class GUITest extends ApplicationTest {
         System.out.println("|                                             |");
         System.out.println("|                 TEST END                    |");
         System.out.println("|                                             |");
-        System.out.println("*************************** *******************");
+        System.out.println("***********************************************");
     }
 }

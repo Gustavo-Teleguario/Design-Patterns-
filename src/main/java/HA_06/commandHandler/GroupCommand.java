@@ -35,7 +35,7 @@ public class GroupCommand extends CommandHandler {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                     controller.drawLines(controller.getObjects().get(path[1]));
                     System.out.println("NEW OBJECT DRAW");
                 } catch (InterruptedException e) {

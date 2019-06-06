@@ -46,12 +46,15 @@ public class CommandPatternTest extends ApplicationTest {
         //clone command
         commands.add("clone g1 g2 50 60");
         assertEquals("clone g1 g2 50 60",commands.get(3));
-
+        commands.add("undo");
+        assertEquals("undo",commands.get(4));
+        commands.add("redo");
+        assertEquals("redo", commands.get(5));
 
         System.out.println("***********************************************");
         System.out.println("|                                             |");
         System.out.println("|                 TEST END                    |");
         System.out.println("|                                             |");
-        System.out.println("*************************** *******************");
+        System.out.println("***********************************************");
     }
 }
