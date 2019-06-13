@@ -11,7 +11,7 @@ public class ShopModel
     @Test
     public void ShopModel(){
 
-        ClassModel model = new ClassModel("Shop");
+        ClassModel model = new ClassModel("HA_07.Shop");
 
         Clazz shopClass = model.createClazz("Shop");
 
@@ -34,6 +34,6 @@ public class ShopModel
         shopCustomerClass.withBidirectional(shopOrderClass,"orders", Cardinality.MANY,"shopCustomer", Cardinality.ONE);
         shopOrderClass.withBidirectional(shopProductClass,"products",Cardinality.MANY,"orders",Cardinality.MANY);
 
-        model.generate("src/main/java/HA_07");
+        model.generate("src/main/java");
     }
 }
