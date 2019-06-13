@@ -11,7 +11,7 @@ public class WareHouseModel {
     @Test
     public void wareHouseModel() {
 
-        ClassModel model = new ClassModel("HA_07.WareHouse");
+        ClassModel model = new ClassModel("WareHouse");
 
         Clazz lotClass = model.createClazz("Lot")
                 .withAttribute("id", DataType.STRING)
