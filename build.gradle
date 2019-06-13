@@ -22,7 +22,7 @@ dependencies {
     testCompile(group: "org.testfx", name: "testfx-core", version: "4.0.13-alpha")
     testCompile(group: "org.testfx", name: "testfx-junit", version: "4.0.13-alpha")
     testCompile(group: 'junit', name: 'junit', version: '4.12')
-
+    //testCompile 'org.fulib:fulib:1.0.+'
     testCompile(
             'junit:junit:4.12',
             'org.junit.jupiter:junit-jupiter-api:5.4.0',
@@ -39,7 +39,7 @@ dependencies {
     compile 'org.json:json:20171018'
     compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2'
     compile 'org.eclipse.paho:org.eclipse.paho.android.service:1.0.2'
-
+    compile 'org.sdmlib:SDMLib:2.+'
 }
 
 test {
