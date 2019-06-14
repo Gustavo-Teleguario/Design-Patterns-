@@ -1,39 +1,42 @@
 package HA_07;
 
-import de.uniks.networkparser.graph.Cardinality;
-import de.uniks.networkparser.graph.Clazz;
-import de.uniks.networkparser.graph.DataType;
+
+import HA_02.FulibProject;
+import org.fulib.Fulib;
+import org.fulib.builder.ClassBuilder;
+import org.fulib.builder.ClassModelBuilder;
+import org.fulib.classmodel.ClassModel;
 import org.junit.Test;
-import org.sdmlib.models.classes.ClassModel;
 
 public class ShopModel
 {
     @Test
     public void ShopModel(){
 
-        ClassModel model = new ClassModel("Shop");
+        ClassModelBuilder model = Fulib.classModelBuilder("HA_07.Shop", "src/main/java");
 
-        Clazz shopClass = model.createClazz("Shop");
+        ClassBuilder shopClass = model.buildClass("Shop");
 
-        Clazz shopCustomerClass = model.createClazz("ShopCustomer")
-                .withAttribute("addresse", DataType.STRING)
-                .withAttribute("name", DataType.STRING);
+        ClassBuilder shopCustomerClass = model.buildClass("ShopCustomer")
+                .buildAttribute("addresse", model.STRING)
+                .buildAttribute("name", model.STRING);
 
-        Clazz shopProductClass = model.createClazz("ShopProduct")
-                .withAttribute("id", DataType.STRING)
-                .withAttribute("inStock",DataType.DOUBLE)
-                .withAttribute("name", DataType.STRING)
-                .withAttribute("price",DataType.DOUBLE);
+        ClassBuilder shopProductClass = model.buildClass("ShopProduct")
+                .buildAttribute("id", model.STRING)
+                .buildAttribute("inStock",model.DOUBLE)
+                .buildAttribute("name", model.STRING)
+                .buildAttribute("price",model.DOUBLE);
 
-        Clazz shopOrderClass = model.createClazz("ShopOrder")
-                .withAttribute("id",DataType.STRING);
+        ClassBuilder shopOrderClass = model.buildClass("ShopOrder")
+                .buildAttribute("id",model.STRING);
 
-        shopClass.withBidirectional(shopProductClass,"products", Cardinality.MANY,"shop", Cardinality.ONE);
-        shopClass.withBidirectional(shopCustomerClass, "customers",Cardinality.MANY,"shop",Cardinality.ONE);
-        shopClass.withBidirectional(shopOrderClass,"orders",Cardinality.MANY,"shop",Cardinality.ONE);
-        shopCustomerClass.withBidirectional(shopOrderClass,"orders", Cardinality.MANY,"shopCustomer", Cardinality.ONE);
-        shopOrderClass.withBidirectional(shopProductClass,"products",Cardinality.MANY,"orders",Cardinality.MANY);
+        shopClass.buildAssociation(shopProductClass,"products", model.MANY,"shop", model.ONE);
+        shopClass.buildAssociation(shopCustomerClass, "customers",model.MANY,"shop",model.ONE);
+        shopClass.buildAssociation(shopOrderClass,"orders",model.MANY,"shop",model.ONE);
+        shopCustomerClass.buildAssociation(shopOrderClass,"orders", model.MANY,"shopCustomer", model.ONE);
+        shopOrderClass.buildAssociation(shopProductClass,"products",model.MANY,"orders",model.MANY);
 
-        model.generate("src/main/java/HA_07");
+       ClassModel classModel = model.getClassModel();
+       Fulib.generator().generate(classModel);
     }
 }

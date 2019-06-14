@@ -1,50 +1,52 @@
 package HA_07;
 
-import de.uniks.networkparser.graph.Cardinality;
-import de.uniks.networkparser.graph.Clazz;
-import de.uniks.networkparser.graph.DataType;
+import org.fulib.Fulib;
+import org.fulib.builder.ClassBuilder;
+import org.fulib.builder.ClassModelBuilder;
+import org.fulib.classmodel.ClassModel;
 import org.junit.Test;
-import org.sdmlib.models.classes.ClassModel;
+
 
 public class WareHouseModel {
 
     @Test
     public void wareHouseModel() {
 
-        ClassModel model = new ClassModel("WareHouse");
+        ClassModelBuilder model = Fulib.classModelBuilder("HA_07.WareHouse", "src/main/java");
 
-        Clazz lotClass = model.createClazz("Lot")
-                .withAttribute("id", DataType.STRING)
-                .withAttribute("lotSize", DataType.DOUBLE);
+        ClassBuilder lotClass = model.buildClass("Lot")
+                .buildAttribute("id", model.STRING)
+                .buildAttribute("lotSize", model.DOUBLE);
 
-        Clazz palettePlaceClass = model.createClazz("PalettePlace")
-                .withAttribute("column", DataType.DOUBLE)
-                .withAttribute("id", DataType.STRING)
-                .withAttribute("row", DataType.DOUBLE);
+        ClassBuilder palettePlaceClass = model.buildClass("PalettePlace")
+                .buildAttribute("column", model.DOUBLE)
+                .buildAttribute("id", model.STRING)
+                .buildAttribute("row", model.DOUBLE);
 
-        Clazz wareHouseClass = model.createClazz("WareHouse")
-                .withAttribute("name", DataType.STRING);
+        ClassBuilder wareHouseClass = model.buildClass("WareHouse")
+                .buildAttribute("name", model.STRING);
 
-        Clazz wareHouseOrderClass = model.createClazz("WareHouseOrder")
-                .withAttribute("addresse", DataType.STRING)
-                .withAttribute("id", DataType.STRING)
-                .withAttribute("product", DataType.STRING);
+        ClassBuilder wareHouseOrderClass = model.buildClass("WareHouseOrder")
+                .buildAttribute("addresse", model.STRING)
+                .buildAttribute("id", model.STRING)
+                .buildAttribute("product", model.STRING);
 
-        Clazz wareHouseProductClass = model.createClazz("WareHouseProduct")
-                .withAttribute("name", DataType.STRING)
-                .withAttribute("id", DataType.STRING);
+        ClassBuilder wareHouseProductClass = model.buildClass("WareHouseProduct")
+                .buildAttribute("name", model.STRING)
+                .buildAttribute("id", model.STRING);
 
-        wareHouseClass.withBidirectional(wareHouseClass, "orders", Cardinality.MANY, "wareHouse", Cardinality.ONE);
-        wareHouseClass.withBidirectional(wareHouseProductClass, "products", Cardinality.MANY, "wareHouse", Cardinality.ONE);
-        wareHouseClass.withBidirectional(palettePlaceClass, "places", Cardinality.MANY, "wareHouse", Cardinality.ONE);
+        wareHouseClass.buildAssociation(wareHouseClass, "orders", model.MANY, "wareHouse", model.ONE);
+        wareHouseClass.buildAssociation(wareHouseProductClass, "products", model.MANY, "wareHouse", model.ONE);
+        wareHouseClass.buildAssociation(palettePlaceClass, "places", model.MANY, "wareHouse", model.ONE);
 
-        wareHouseOrderClass.withBidirectional(wareHouseProductClass, "products", Cardinality.MANY, "orders", Cardinality.MANY);
+        wareHouseOrderClass.buildAssociation(wareHouseProductClass, "products", model.MANY, "orders", model.MANY);
 
-        wareHouseProductClass.withBidirectional(lotClass, "lots", Cardinality.MANY, "wareHouseProduct", Cardinality.ONE);
+        wareHouseProductClass.buildAssociation(lotClass, "lots", model.MANY, "wareHouseProduct", model.ONE);
 
-        lotClass.withBidirectional(palettePlaceClass, "palettePlace", Cardinality.ONE, "lot", Cardinality.ONE);
+        lotClass.buildAssociation(palettePlaceClass, "palettePlace", model.ONE, "lot", model.ONE);
 
-        model.generate("src/main/java");
+       ClassModel classModel = model.getClassModel();
+       Fulib.generator().generate(classModel);
 
     }
 
