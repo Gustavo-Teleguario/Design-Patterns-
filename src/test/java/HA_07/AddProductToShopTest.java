@@ -12,6 +12,7 @@ import org.junit.Test;
  * Homework No 07
  * University of Kassel
  */
+// HA07: 10/10
 public class AddProductToShopTest {
 
     @Test
