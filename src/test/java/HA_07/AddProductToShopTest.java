@@ -1,10 +1,19 @@
 package HA_07;
 
 import HA_07.Shop.ShopBuilder;
+import HA_07.Shop.ShopProduct;
 import HA_07.Shop.ShopServer;
 import HA_07.WareHouse.WarehouseBuilder;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static java.nio.file.Files.delete;
+
 /**
  * Created by Maynor Teleguario
  * 30247228
@@ -22,6 +31,7 @@ public class AddProductToShopTest {
         System.out.println("|                 TEST BEGINN                 |");
         System.out.println("|                                             |");
         System.out.println("***********************************************");
+
 
         WarehouseBuilder warehouseBuilder = new WarehouseBuilder();
         ShopServer shopServer = new ShopServer();

@@ -31,7 +31,7 @@ public class WarehouseProxy {
 
     }
 
-    private void sendRequest(String yaml) throws Exception {
+    public void sendRequest(String yaml) throws Exception {
         try {
 
             URL url = new URL("http://localhost:3374/event");
@@ -65,5 +65,8 @@ public class WarehouseProxy {
             }, 20, TimeUnit.SECONDS);
 
         }
+    }
+
+    public void orderProduct(LinkedHashMap<String, String> event) {
     }
 }
