@@ -1,6 +1,10 @@
 package HA_07.Shop;
 
+import HA_06.Line;
+import HA_07.WareHouse.WareHouse;
+import org.fulib.yaml.EventFiler;
 import org.fulib.yaml.EventSource;
+import org.fulib.yaml.Yamler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,29 +22,56 @@ public class ShopBuilder {
 
 
     private EventSource eventSource;
-    private Shop shop;
+    public Shop shop;
     private WarehouseProxy warehouseProxy;
+    public WareHouse wareHouse;
 
     public ShopBuilder() {
         eventSource = new EventSource();
-        shop = new Shop();
+        shop = new Shop().setName("TheShop");
         warehouseProxy = new WarehouseProxy();
+
+       EventFiler eventFilter = new EventFiler(eventSource)
+                .setHistoryFileName("database/Shop.yaml");
+        String yaml = eventFilter.loadHistory();
+        if(yaml != null){
+            ArrayList<LinkedHashMap<String,String>> eventList = new Yamler().decodeList(yaml);
+            this.applyEvent(eventList);
+        }
+        eventFilter.startEventLogging();
 
     }
 
-    public void orderProduct(String productName, String addresse, String orderId){
+    public void orderProduct(String orderId, String productName, String customerName){
 
-        LinkedHashMap<String,String> event = new LinkedHashMap<>();
+        LinkedHashMap<String,String> event = eventSource.getEvent(orderId);
+        if(event != null){
+            return;
+        }
+
+        ShopOrder order = getFromOrders(orderId);
+        ShopCustomer customer = getFromCustomer(customerName);
         ShopProduct product = getFromProducts(productName);
-        double oldCount = product.getInStock();
-        product.setInStock(oldCount-1);
+
+
+        double size = product.getInStock() -1;
+        if(size == 0){
+            shop.getProducts().remove(product);
+        }
+        product.setInStock(size);
+        order.setShopCustomer(customer);
+
+        event = new LinkedHashMap<String, String>();
         event.put(EVENT_TYPE,"orderProduct");
         event.put(EVENT_KEY,orderId);
         event.put(PRODUCT, productName);
-        event.put("ADDRESS", addresse);
+        event.put("NAME", order.getShop().getName());
         eventSource.append(event);
 
-        warehouseProxy.orderProduct(event);
+        String yaml = eventSource.encodeYaml();
+        ShopServer.sendRequest("http://localhost:3374/warehouseOrder",yaml);
+
+        //warehouseProxy.orderProduct(event);
 
     }
 
@@ -89,5 +120,46 @@ public class ShopBuilder {
                 .setShop(this.shop);
 
         return shopProduct;
+    }
+
+    public void addCostumer(String name, String address){
+
+        LinkedHashMap<String, String> event = eventSource.getEvent(name);
+        if(event != null){
+            return;
+        }
+        ShopCustomer customer = getFromCustomer(name)
+        .setAddresse(address);
+
+        event = new LinkedHashMap<String,String>();
+        event.put(EVENT_TYPE, "ADD_CUSTOMER");
+        event.put(EVENT_KEY, name);
+        event.put("ADDRESS", customer.getAddresse());
+        eventSource.append(event);
+    }
+
+    private ShopCustomer getFromCustomer(String name) {
+
+        for(ShopCustomer el: shop.getCustomers()){
+            if(el.getName().equals(name)){
+                return el;
+            }
+        }
+        ShopCustomer result = new ShopCustomer()
+                .setName(name)
+                .setShop(shop);
+        return result;
+    }
+
+    public ShopOrder getFromOrders(String orderId) {
+        for(ShopOrder order: shop.getOrders()){
+            if(order.getId().equals(orderId)){
+                return order;
+            }
+        }
+        ShopOrder result = new ShopOrder()
+                .setId(orderId)
+                .setShop(shop);
+        return result;
     }
 }

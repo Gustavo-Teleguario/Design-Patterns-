@@ -93,4 +93,8 @@ public class ShopProxy {
     }
 
 
+    public String getEventSource() {
+        String yaml = eventSource.encodeYaml();
+        return yaml;
+    }
 }

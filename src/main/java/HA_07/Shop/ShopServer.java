@@ -7,26 +7,28 @@ import org.fulib.yaml.Yamler;
 
 
 import java.io.*;
-import java.net.InetSocketAddress;
-import java.net.URI;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class ShopServer {
 
-    private static ShopBuilder builder;
-    private static ExecutorService executor;
+    public static ShopBuilder builder;
+    private static ScheduledExecutorService executor;
     private static ExecutorService threadPool;
     private static Date time;
     private static String lastKnowWarehouseEventTime;
 
     public ShopServer() {
         builder = new ShopBuilder();
+        time = new Date();
     }
 
     public static void main(String[] args) {
@@ -34,7 +36,7 @@ public class ShopServer {
         HttpServer server = null;
 
         try {
-            executor = Executors.newSingleThreadExecutor();
+            executor = Executors.newSingleThreadScheduledExecutor();
             threadPool = Executors.newCachedThreadPool();
 
             server = HttpServer.create(new InetSocketAddress(5001), 0);
@@ -43,10 +45,11 @@ public class ShopServer {
             context.setHandler(x -> handleReques(x));
 
             HttpContext proxyContent = server.createContext("/getWarehouseEvents");
+            proxyContent.setHandler(x-> builder.wareHouse.getWarehouseEvent(x));
 
             server.start();
 
-            retrieveNewEventsFromWarehouse();
+           // retrieveNewEventsFromWarehouse();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,55 +57,62 @@ public class ShopServer {
     }
 
     public static void retrieveNewEventsFromWarehouse() {
-
         lastKnowWarehouseEventTime = time.toString();
         String wareHouseEvents = sendRequest("http://localhost:3374/getShopEvent", "lastKnow" + lastKnowWarehouseEventTime);
         ArrayList<LinkedHashMap<String, String>> eventList = new Yamler().decodeList(wareHouseEvents);
         executor.execute(() -> builder.applyEvent(eventList));
     }
 
-    private static String sendRequest(String url, String postYaml) {
+    public static String sendRequest(String urlAdress, String yaml) {
         Logger.getGlobal().info("\n" + "Shopserver:: sendRequest\n" + " url: "
-                + url + " \n" + "postYaml: " + postYaml);
+                + urlAdress + " \n" + "postYaml: " + yaml);
 
-      /*  try {
+        try {
 
-        }catch (IOException e){
-            e.printStackTrace();
-        }*/
-        return null;
+            URL url = new URL(urlAdress);
+            URLConnection conection = url.openConnection();
+            HttpURLConnection http = (HttpURLConnection) conection;
+            http.setRequestMethod("POST");
+            http.setDoInput(true);
+
+            byte[] output = yaml.getBytes(StandardCharsets.UTF_8);
+            int lenght = output.length;
+
+            http.setFixedLengthStreamingMode(lenght);
+            http.setRequestProperty("Content-Type", "application/yaml; chartset=UTF-8");
+            http.connect();
+
+            try (OutputStream os = http.getOutputStream()) {
+                os.write(output);
+            }
+
+            InputStream inputStream = http.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            StringBuilder text = new StringBuilder();
+            bufferedReader.close();
+            while (true){
+                String line = bufferedReader.readLine();
+                if(line == null){
+                    break;
+                }
+                text.append(line);
+            }
+
+            bufferedReader.close();
+            String response = text.toString();
+            return response;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private static void handleReques(HttpExchange exchange) throws IOException {
 
         String body = getBody(exchange);
         System.out.println("Shop Server: got " + body);
-        ArrayList<LinkedHashMap<String, String>> eventList = new Yamler().decodeList(body.toString());
+      //  ArrayList<LinkedHashMap<String, String>> eventList = new Yamler().decodeList(body.toString());
         writeAnswer(exchange, "OK");
-
         retrieveNewEventsFromWarehouse();
-
-       /* InputStream requestBody = exchange.getRequestBody();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(requestBody));
-
-        StringBuilder message = new StringBuilder();
-
-        while (true) {
-            String line = reader.readLine();
-            if (line == null) {
-                break;
-            }
-            message.append(line).append("\n");
-        }
-        String yaml = message.toString();
-        ArrayList<LinkedHashMap<String, String>> list = new Yamler().decodeList(yaml);
-        builder.applyEvent(list);
-
-        String response = "OK" + exchange.getRequestURI();
-        exchange.sendResponseHeaders(200, response.getBytes().length);
-        OutputStream os = exchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();*/
     }
 
     private static void writeAnswer(HttpExchange exchange, String response) {

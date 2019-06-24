@@ -1,5 +1,7 @@
 package HA_07.WareHouse;
 
+import com.sun.net.httpserver.HttpExchange;
+
 import java.beans.PropertyChangeSupport;
 
 import java.beans.PropertyChangeListener;
@@ -369,5 +371,8 @@ public class WareHouse
 
    }
 
-
+    public String getWarehouseEvent(HttpExchange x) {
+      //System.out.println("WarehouseEvent");
+      return "TheWareHouseEvent";
+    }
 }
