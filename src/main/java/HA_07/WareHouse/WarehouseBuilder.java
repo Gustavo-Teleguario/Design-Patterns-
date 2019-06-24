@@ -5,6 +5,7 @@ import org.fulib.yaml.EventFiler;
 import org.fulib.yaml.EventSource;
 import org.fulib.yaml.Yamler;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -54,7 +55,7 @@ public class WarehouseBuilder {
 
         for (LinkedHashMap<String, String> map : eventList) {
             if (ADD_LOT_TO_STOCK.equals(map.get(EVENT_TYPE))) {
-                int size = Integer.valueOf(map.get("SIZE"));
+                int size = Integer.valueOf(map.get(SIZE));
                 addLotToStock(map.get(LOT_ID), map.get(PRODUCT), size);
             } else if (ORDER_PRODUCT.equals(map.get(EVENT_TYPE))) {
                 orderProduct(map.get(EVENT_KEY), map.get(PRODUCT), map.get(ADDRESS));
@@ -116,7 +117,6 @@ public class WarehouseBuilder {
         if (oldSize == 0.0) {
             this.warehouseProxy.addProductToShop(event);
         }
-
         return lot;
     }
 
@@ -153,4 +153,5 @@ public class WarehouseBuilder {
                 .setId(lotId);
         return lot;
     }
+
 }

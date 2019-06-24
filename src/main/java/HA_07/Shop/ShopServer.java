@@ -25,6 +25,7 @@ public class ShopServer {
     private static ExecutorService threadPool;
     private static Date time;
     private static String lastKnowWarehouseEventTime;
+    public static HttpServer server;
 
     public ShopServer() {
         builder = new ShopBuilder();
@@ -33,7 +34,7 @@ public class ShopServer {
 
     public static void main(String[] args) {
 
-        HttpServer server = null;
+       server = null;
 
         try {
             executor = Executors.newSingleThreadScheduledExecutor();
@@ -49,6 +50,9 @@ public class ShopServer {
 
             server.start();
 
+            /*
+            Funktioniert leider nicht
+             */
            // retrieveNewEventsFromWarehouse();
 
         } catch (Exception e) {
@@ -58,7 +62,7 @@ public class ShopServer {
 
     public static void retrieveNewEventsFromWarehouse() {
         lastKnowWarehouseEventTime = time.toString();
-        String wareHouseEvents = sendRequest("http://localhost:3374/getShopEvent", "lastKnow" + lastKnowWarehouseEventTime);
+        String wareHouseEvents = sendRequest("http://localhost:3374/getShopEvents", "lastKnow" + lastKnowWarehouseEventTime);
         ArrayList<LinkedHashMap<String, String>> eventList = new Yamler().decodeList(wareHouseEvents);
         executor.execute(() -> builder.applyEvent(eventList));
     }
@@ -102,8 +106,9 @@ public class ShopServer {
             String response = text.toString();
             return response;
         } catch (Exception e) {
-            return null;
+            executor.schedule(()-> sendRequest(urlAdress,yaml),60, TimeUnit.SECONDS);
         }
+        return null;
     }
 
     private static void handleReques(HttpExchange exchange) throws IOException {

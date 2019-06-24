@@ -26,7 +26,6 @@ public class WebShopTest {
         try {
             Files.delete(Paths.get("database/Warehouse.yaml"));
             Files.delete(Paths.get("database/Shop.yaml"));
-          //  Files.delete(Paths.get("database/ShopProxy.yaml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -55,11 +54,48 @@ public class WebShopTest {
         Assert.assertTrue(     WarehouseServer.builder.getLot("lot3").getWareHouseProduct().getName().equals("Shoe 42, size 9"));
         Assert.assertTrue(     WarehouseServer.builder.getLot("lot3").getLotSize()== 50);
 
-        ShopServer.builder.addCostumer("Maynor", "Calle13");
+        ShopServer.builder.addCostumer("Maynor", "Calle14");
         ShopServer.builder.orderProduct("o1", "Shoe 42, size 8", "Maynor");
 
         ShopOrder order = ShopServer.builder.getFromOrders("o1");
-        System.out.println("***********************************************");
+
+        Assert.assertEquals(order.getShopCustomer().getAddresse(),"Calle14");
+        Assert.assertEquals(order.getShopCustomer().getName(),"Maynor");
+        Assert.assertEquals(ShopServer.builder.getFromCustomer("Maynor").getAddresse(),"Calle14");
+
+        printProductsFromWareHouseAndShop(warehouseBuilder,shopBuilder);
+
+        WarehouseServer.server.stop(0);
+        WarehouseServer.builder = null;
+
+        ShopServer.server.stop(0);
+        ShopServer.builder = null;
+
+        Thread.sleep(100);
+
+        WarehouseServer.main(null);
+
+        Thread.sleep(100);
+
+        printProductsFromWareHouseAndShop(warehouseBuilder,shopBuilder);
+
+        Thread.sleep(100);
+
+        WarehouseServer.builder.addLotToStock("lot4","Shoe 39, size 6",20 );
+
+        Thread.sleep(100);
+
+        printProductsFromWareHouseAndShop(warehouseBuilder,shopBuilder);
+
+       ShopServer.main(null);
+
+       Thread.sleep(100);
+
+       printProductsFromWareHouseAndShop(warehouseBuilder,shopBuilder);
+
+
+
+        System.out.println("******************** ***************************");
         System.out.println("|                                             |");
         System.out.println("|                 TEST END                    |");
         System.out.println("|                                             |");

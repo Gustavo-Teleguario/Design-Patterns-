@@ -19,6 +19,7 @@ public class ShopBuilder {
     public static final String SIZE = "size";
     public static final String PRODUCT = "product";
     public static final String NUMBER_OF_ITEMS = "numberOfItems";
+    public static final String ADD_CUSTOMER = "addCustomer";
 
 
     private EventSource eventSource;
@@ -62,7 +63,7 @@ public class ShopBuilder {
         order.setShopCustomer(customer);
 
         event = new LinkedHashMap<String, String>();
-        event.put(EVENT_TYPE,"orderProduct");
+        event.put(EVENT_TYPE,ADD_CUSTOMER);
         event.put(EVENT_KEY,orderId);
         event.put(PRODUCT, productName);
         event.put("NAME", order.getShop().getName());
@@ -71,7 +72,7 @@ public class ShopBuilder {
         String yaml = eventSource.encodeYaml();
         ShopServer.sendRequest("http://localhost:3374/warehouseOrder",yaml);
 
-        //warehouseProxy.orderProduct(event);
+        warehouseProxy.orderProduct(event);
 
     }
 
@@ -138,7 +139,7 @@ public class ShopBuilder {
         eventSource.append(event);
     }
 
-    private ShopCustomer getFromCustomer(String name) {
+    public ShopCustomer getFromCustomer(String name) {
 
         for(ShopCustomer el: shop.getCustomers()){
             if(el.getName().equals(name)){

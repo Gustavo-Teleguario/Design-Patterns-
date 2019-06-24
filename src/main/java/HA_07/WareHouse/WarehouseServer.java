@@ -21,8 +21,6 @@ public class WarehouseServer {
     private static ScheduledExecutorService executorService;
     public static HttpServer server;
 
-
-
     public static void main(String[] args) {
 
         server = null;
@@ -57,8 +55,8 @@ public class WarehouseServer {
     private static void handleWarehouseRequest(HttpExchange exchange) {
         String events = getBody(exchange);
         writeAnswer(exchange, "OK");
-        ArrayList<LinkedHashMap<String,String>> eventList = new Yamler().decodeList(events);
-        executorService.execute(()-> {
+        ArrayList<LinkedHashMap<String, String>> eventList = new Yamler().decodeList(events);
+        executorService.execute(() -> {
             try {
                 builder.applyEvents(eventList);
             } catch (Exception e) {
@@ -75,23 +73,23 @@ public class WarehouseServer {
 
         URI requestURI = exchange.getRequestURI();
         InputStream requestBody = exchange.getRequestBody();
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(requestBody,StandardCharsets.UTF_8));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(requestBody, StandardCharsets.UTF_8));
         StringBuilder text = new StringBuilder();
 
-        while (true){
+        while (true) {
             String line = bufferedReader.readLine();
-            if(line== null){
+            if (line == null) {
                 break;
             }
             text.append(line);
         }
 
         String yaml = text.toString();
-        ArrayList<LinkedHashMap<String,String>> eventList = new Yamler().decodeList(yaml);
+        ArrayList<LinkedHashMap<String, String>> eventList = new Yamler().decodeList(yaml);
         builder.applyEvents(eventList);
 
         String response = builder.theShop.getEventSource();
-        exchange.sendResponseHeaders(200,response.getBytes().length);
+        exchange.sendResponseHeaders(200, response.getBytes().length);
         OutputStream os = exchange.getResponseBody();
         os.write(response.getBytes());
         os.close();
@@ -104,14 +102,14 @@ public class WarehouseServer {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(requestBody, StandardCharsets.UTF_8));
         StringBuilder text = new StringBuilder();
 
-        while (true){
+        while (true) {
             String line = null;
             try {
                 line = bufferedReader.readLine();
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            if(line == null){
+            if (line == null) {
                 break;
             }
             text.append(line);
@@ -147,7 +145,7 @@ public class WarehouseServer {
             bufferedReader.close();
 
         } catch (Exception e) {
-            executorService.schedule(()->sendRequest(urlAddress,yaml), 50, TimeUnit.SECONDS);
+            executorService.schedule(() -> sendRequest(urlAddress, yaml), 50, TimeUnit.SECONDS);
         }
     }
 

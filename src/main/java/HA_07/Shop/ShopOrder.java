@@ -239,5 +239,7 @@ public class ShopOrder
 
    }
 
-
+   public Object getShopProduct() {
+      return this.products;
+   }
 }
