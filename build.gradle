@@ -27,10 +27,9 @@ repositories {
         testCompile(group: 'junit', name: 'junit', version: '4.12')
         testCompile 'org.fulib:fulib:1.0.+'
         testCompile(
-                'junit:junit:4.12',
-                'org.junit.jupiter:junit-jupiter-api:5.4.0',
-
-        )
+                'junit:junit:4.12')
+        testCompile "org.testcontainers:testcontainers:1.11.3"
+        
         testRuntime(
                 'org.junit.jupiter:junit-jupiter-engine:5.4.0',
                 'org.junit.vintage:junit-vintage-engine:5.4.0'
@@ -42,14 +41,21 @@ repositories {
         compile 'org.json:json:20171018'
         compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.0.2'
         compile 'org.eclipse.paho:org.eclipse.paho.android.service:1.0.2'
-       // compile 'org.sdmlib:SDMLib:2.+'
+        // compile 'org.sdmlib:SDMLib:2.+'
         compile 'org.fulib:fulibYaml:1.0.+'
         compile 'org.slf4j:slf4j-nop:1.7.25'
     }
 
-    test {
+    /*test {
         useJUnitPlatform()
-    }
+    }*/
+}
 
-
+task(runWarehouse, dependsOn: 'classes', type: JavaExec) {
+    main = 'HA_07.WareHouse.WarehouseServer'
+    classpath = sourceSets.main.runtimeClasspath
+}
+task(runShop, dependsOn: 'classes', type: JavaExec) {
+    main = 'HA_07.Shop.ShopServer'
+    classpath = sourceSets.main.runtimeClasspath
 }
