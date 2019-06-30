@@ -1,4 +1,4 @@
 FROM openjdk:8-jre-alpine
-COPY .. /shop
+COPY . /shop
 WORKDIR /shop
 CMD["/usr/bin/java", "-jar","shopServer.jar"]

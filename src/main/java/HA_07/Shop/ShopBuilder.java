@@ -70,7 +70,7 @@ public class ShopBuilder {
         eventSource.append(event);
 
         String yaml = eventSource.encodeYaml();
-        ShopServer.sendRequest("http://localhost:3374/warehouseOrder",yaml);
+        ShopServer.sendRequest("http://localhost:5002/warehouseOrder",yaml);
 
         warehouseProxy.orderProduct(event);
 

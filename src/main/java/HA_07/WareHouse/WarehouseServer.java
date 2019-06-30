@@ -26,7 +26,7 @@ public class WarehouseServer {
         server = null;
         try {
             builder = new WarehouseBuilder();
-            server = HttpServer.create(new InetSocketAddress(6789), 0);
+            server = HttpServer.create(new InetSocketAddress(5002), 0);
             executorService = Executors.newSingleThreadScheduledExecutor();
             server.setExecutor(executorService);
 

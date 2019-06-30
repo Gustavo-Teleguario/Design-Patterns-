@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+
+  shopserver:
+    build: ./DockerShop
+      image: shopserver
+      networks:
+        -shopnet
+      ports:
+        - "5001:5001"
+      volumes:
+        - "DP_30247228:/server"
+
+  warehouseserver:
+    build: ./DockerWarehouse
+      image: warehouseserver
+      networks:
+        - shopnet
+        ports:
+          - "5002:5002"
+        volumes:
+          - "DP_30247228:/server"
+  volumes:
+    DP_30247228:
+
+  networks:
+    shopnet:
+      driver: bridge

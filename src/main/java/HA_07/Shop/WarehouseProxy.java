@@ -37,7 +37,7 @@ public class WarehouseProxy {
             URL url = new URL("http://localhost:3374/event");
             URLConnection conection = url.openConnection();
             HttpURLConnection http = (HttpURLConnection) conection;
-            http.setRequestMethod("POST");
+            http.setRequestMethod("GET");
             http.setDoInput(true);
 
             byte[] output = yaml.getBytes(StandardCharsets.UTF_8);
