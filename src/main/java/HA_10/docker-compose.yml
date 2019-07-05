@@ -1,0 +1,32 @@
+version: "3.1"
+
+services:
+
+  shopserver:
+    build: ./DockerShop
+      image: shopserver
+      container_name: shopserver
+      networks:
+        -shopnet
+      ports:
+        - "5001:5001"
+      volumes:
+        - "volumen1:/server"
+
+  warehouseserver:
+    build: ./DockerWarehouse
+      image: warehouseserver
+      container_name: warehouseserver
+      networks:
+        - shopnet
+        ports:
+          - "5002:5002"
+        volumes:
+          - "volumen2:/server"
+  volumes:
+    volumen1:
+    volumen2:
+
+  networks:
+    shopnet:
+      driver: bridge
