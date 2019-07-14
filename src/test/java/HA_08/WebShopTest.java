@@ -11,7 +11,9 @@ import org.junit.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
+// HA08: 10/10
+// HA09: 10/10
+// HA10: 10/10
 
 public class WebShopTest {
 
