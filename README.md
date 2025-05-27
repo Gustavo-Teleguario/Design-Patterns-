@@ -73,8 +73,6 @@ This repository contains my complete coursework and assignments for the **Design
 
 ### For Learning
 - Each pattern includes **practical examples** with real-world scenarios
-- **Step-by-step comments** explaining implementation details
-- **UML diagrams** showing pattern structure and relationships
 - **Test cases** demonstrating pattern functionality
 ---
 
