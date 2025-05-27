@@ -27,8 +27,8 @@ This repository contains my complete coursework and assignments for the **Design
 ### Setup
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/DesignPatterns-Java.git
-   cd DesignPatterns-Java
+   git clone https://github.com/YOUR_USERNAME/repository-name.git
+   cd repository-name
    ```
 
 2. **Build with Gradle:**
@@ -39,7 +39,7 @@ This repository contains my complete coursework and assignments for the **Design
 
 3. **Open in your IDE:**
    - Import as **Gradle project**
-   - Ensure JDK is properly configured
+   - Ensure your JDK environment is correctly configured
    - Let Gradle download all required dependencies automatically
 
 4. **Run tests:**
@@ -72,14 +72,14 @@ This repository contains my complete coursework and assignments for the **Design
 ## 🔍 How to Use This Repository
 
 ### For Learning
-- Each pattern includes **practical examples** with real-world scenarios
+- The homework assignments (HA 01 to 10) align directly with the university lessons. Each of these lessons includes practical examples based on real-world scenarios
 - **Test cases** demonstrating pattern functionality
 ---
 
 ## 📖 Additional Resources
 
 - **Book:** "Design Patterns: Entwurfsmuster von Kopf bis Fuß" by Eric Freeeman & Elisabeth Freeman
-- **Online:** Refactoring.Guru Design Patterns
+- **Online:** https://www.youtube.com/@se-kassel
 - **Practice:** Implementation challenges and exercises
 
 ---
